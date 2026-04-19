@@ -1,0 +1,651 @@
+# Game EAC – Mockup Estrutural em React
+## Referência de arquitetura visual e composição de componentes
+
+---
+
+## 1. Objetivo deste mockup
+
+Este material serve para orientar o DEV sobre:
+
+- como quebrar a interface em componentes
+- como estruturar as telas principais
+- como organizar a hierarquia visual
+- como manter padrão de UX, US e UI
+- como acelerar o desenvolvimento do frontend
+
+---
+
+## 2. Stack visual sugerida
+
+- React
+- TypeScript
+- Tailwind CSS
+- Lucide React para ícones
+- Framer Motion para animações leves
+- Zustand ou Context API para estado local
+- React Router ou App Router, dependendo da stack escolhida
+
+---
+
+## 3. Estrutura sugerida de pastas
+
+```text
+src/
+  components/
+    layout/
+      AppShell.tsx
+      AppHeader.tsx
+      BottomActions.tsx
+
+    game/
+      MazeGrid.tsx
+      MazeCell.tsx
+      WordProgress.tsx
+      ScorePanel.tsx
+      PhaseProgress.tsx
+      ResultCard.tsx
+      ReflectionCard.tsx
+      ShareActions.tsx
+
+    ranking/
+      RankingList.tsx
+      RankingCard.tsx
+      PlayerRankHighlight.tsx
+
+    player/
+      PlayerForm.tsx
+      ContinuePlayerForm.tsx
+      PlayerSummaryCard.tsx
+
+    common/
+      PrimaryButton.tsx
+      SecondaryButton.tsx
+      Card.tsx
+      LogoBlock.tsx
+      ScreenTitle.tsx
+      EmptyState.tsx
+      LoadingState.tsx
+      ErrorState.tsx
+
+  screens/
+    WelcomeScreen.tsx
+    PlayerRegisterScreen.tsx
+    ContinueGameScreen.tsx
+    HomeScreen.tsx
+    GameScreen.tsx
+    ResultScreen.tsx
+    RankingScreen.tsx
+    ShareScreen.tsx
+    FinalJourneyScreen.tsx
+
+  hooks/
+    usePlayer.ts
+    useGame.ts
+    useRanking.ts
+
+  services/
+    playerService.ts
+    gameService.ts
+    rankingService.ts
+
+  store/
+    gameStore.ts
+    playerStore.ts
+
+  types/
+    game.ts
+    player.ts
+    ranking.ts
+
+    4. Componente raiz da aplicação
+App.tsx
+
+Responsável por:
+
+roteamento
+contexto global
+tema visual base
+navegação entre telas
+Estrutura conceitual
+
+<AppShell>
+  <Router>
+    <Routes />
+  </Router>
+</AppShell>
+
+5. Layout base da aplicação
+AppShell.tsx
+Responsabilidade
+
+Criar a moldura principal do app:
+
+fundo
+largura máxima
+altura da viewport
+área segura para mobile
+organização central do conteúdo
+Estrutura conceitual
+
+<div className="min-h-screen w-full bg-neutral-950 text-white">
+  <main className="mx-auto flex min-h-screen max-w-md flex-col">
+    {children}
+  </main>
+</div>
+
+Regras
+foco em mobile first
+limitar largura máxima para manter cara de app
+evitar aparência de sistema desktop comprimido
+6. Telas principais
+6.1 WelcomeScreen.tsx
+Objetivo
+
+Tela inicial com entrada no jogo
+
+Estrutura sugerida
+
+<AppShell>
+  <div className="flex min-h-screen flex-col justify-between px-6 py-8">
+    <LogoBlock />
+    <div className="space-y-4 text-center">
+      <ScreenTitle
+        title="Game EAC"
+        subtitle="Labirinto de Palavras"
+      />
+      <p>
+        Descubra palavras, avance nas fases e participe do ranking do encontro.
+      </p>
+    </div>
+
+    <div className="space-y-3">
+      <PrimaryButton label="Continuar meu jogo" />
+      <PrimaryButton label="Novo jogador" />
+      <SecondaryButton label="Ver ranking" />
+    </div>
+  </div>
+</AppShell>
+
+Componentes usados
+LogoBlock
+ScreenTitle
+PrimaryButton
+SecondaryButton
+6.2 PlayerRegisterScreen.tsx
+Objetivo
+
+Cadastrar novo jogador
+
+Estrutura sugerida
+
+<AppShell>
+  <AppHeader title="Identifique-se" showBack />
+  <div className="flex flex-1 flex-col px-6 py-6">
+    <PlayerForm />
+    <div className="mt-6">
+      <SecondaryButton label="Continuar com telefone" />
+    </div>
+  </div>
+</AppShell>
+
+PlayerForm.tsx
+
+Campos:
+
+nome
+apelido
+telefone
+Estrutura sugerida
+
+<Card>
+  <div className="space-y-4">
+    <Input label="Nome" />
+    <Input label="Apelido" />
+    <Input label="Telefone" />
+    <PrimaryButton label="Entrar no jogo" />
+  </div>
+</Card>
+
+6.3 ContinueGameScreen.tsx
+Objetivo
+
+Recuperar jogador existente
+
+Estrutura sugerida
+
+<AppShell>
+  <AppHeader title="Continuar meu jogo" showBack />
+  <div className="flex flex-1 flex-col gap-6 px-6 py-6">
+    <ContinuePlayerForm />
+    <PlayerSummaryCard />
+    <PrimaryButton label="Continuar" />
+  </div>
+</AppShell>
+
+ContinuePlayerForm.tsx
+<Card>
+  <div className="space-y-4">
+    <Input label="Telefone cadastrado" />
+    <PrimaryButton label="Buscar meu progresso" />
+  </div>
+</Card>
+
+PlayerSummaryCard.tsx
+
+Exibir:
+
+nome
+apelido
+fase atual
+pontuação
+6.4 HomeScreen.tsx
+Objetivo
+
+Resumo do jogador e acesso rápido à fase atual
+
+Estrutura sugerida
+
+<AppShell>
+  <AppHeader title="Game EAC" />
+
+  <div className="flex flex-1 flex-col gap-5 px-6 py-6">
+    <Card>
+      <div className="space-y-2">
+        <h2>Olá, Lucas 👋</h2>
+        <p>Pontuação total: 240</p>
+        <p>Ranking atual: #5</p>
+      </div>
+    </Card>
+
+    <Card>
+      <PhaseProgress current={3} total={10} />
+    </Card>
+
+    <div className="space-y-3">
+      <PrimaryButton label="Continuar fase atual" />
+      <SecondaryButton label="Ver ranking" />
+      <SecondaryButton label="Compartilhar jogo" />
+    </div>
+  </div>
+</AppShell>
+
+Componentes usados
+AppHeader
+Card
+PhaseProgress
+PrimaryButton
+SecondaryButton
+6.5 GameScreen.tsx
+Objetivo
+
+Tela principal do jogo
+
+Estrutura sugerida
+
+<AppShell>
+  <AppHeader title="Fase 3" />
+
+  <div className="flex flex-1 flex-col justify-between px-4 py-4">
+    <div className="space-y-4">
+      <ScorePanel points={240} time="00:18" />
+      <WordProgress value="P E _ _ _ _" />
+    </div>
+
+    <div className="flex flex-1 items-center justify-center">
+      <MazeGrid />
+    </div>
+
+    <BottomActions>
+      <SecondaryButton label="Reiniciar" />
+      <SecondaryButton label="Voltar" />
+    </BottomActions>
+  </div>
+</AppShell>
+
+Componentes obrigatórios na tela
+AppHeader
+ScorePanel
+WordProgress
+MazeGrid
+BottomActions
+7. Componentes centrais do jogo
+7.1 MazeGrid.tsx
+Objetivo
+
+Renderizar o grid do labirinto
+
+Estrutura sugerida
+
+<div className="grid grid-cols-4 gap-2">
+  {cells.map((cell) => (
+    <MazeCell key={cell.id} {...cell} />
+  ))}
+</div>
+
+Regras
+grid responsivo
+tamanho da célula proporcional à tela
+nunca ficar pequeno demais para toque
+centralizado
+deve parecer o coração da experiência
+7.2 MazeCell.tsx
+Objetivo
+
+Representar cada célula
+
+Props sugeridas
+letter
+isSelected
+isVisited
+isBlocked
+isCorrectPath
+onClick
+Estrutura sugerida
+<button
+  className="
+    flex h-16 w-16 items-center justify-center
+    rounded-2xl border text-xl font-bold
+    transition
+  "
+>
+  {letter}
+</button>
+Estados visuais
+padrão
+visitada
+selecionada
+erro
+acerto
+Regras de UX/UI
+letras grandes
+área de toque confortável
+contraste alto
+transição visual suave
+feedback imediato ao clique
+7.3 WordProgress.tsx
+Objetivo
+
+Mostrar a palavra sendo formada
+
+Estrutura sugerida
+<Card>
+  <div className="text-center">
+    <p className="text-sm opacity-70">Palavra</p>
+    <h2 className="text-2xl font-bold tracking-widest">
+      P E _ _ _ _
+    </h2>
+  </div>
+</Card>
+Regras
+precisa ser fácil de ler
+ocupar posição acima do grid
+transmitir progresso com clareza
+7.4 ScorePanel.tsx
+Objetivo
+
+Exibir pontuação e tempo
+
+Estrutura sugerida
+<div className="grid grid-cols-2 gap-3">
+  <Card>
+    <p className="text-sm opacity-70">Pontos</p>
+    <h3 className="text-xl font-bold">240</h3>
+  </Card>
+  <Card>
+    <p className="text-sm opacity-70">Tempo</p>
+    <h3 className="text-xl font-bold">00:18</h3>
+  </Card>
+</div>
+Regras
+simples
+informativo
+não competir com o labirinto
+8. Tela de resultado
+ResultScreen.tsx
+Objetivo
+
+Fechar a fase com recompensa visual e próximo passo
+
+Estrutura sugerida
+<AppShell>
+  <AppHeader title="Resultado da fase" />
+
+  <div className="flex flex-1 flex-col gap-5 px-6 py-6">
+    <ResultCard
+      word="PERDÃO"
+      points={125}
+      time="00:24"
+      attempts={1}
+    />
+
+    <ReflectionCard
+      message="Perdoar não muda o passado, mas muda o coração."
+      reflection="Existe alguém que você precisa perdoar hoje?"
+    />
+
+    <div className="space-y-3">
+      <PrimaryButton label="Próxima fase" />
+      <SecondaryButton label="Compartilhar" />
+      <SecondaryButton label="Refletir depois" />
+    </div>
+  </div>
+</AppShell>
+ResultCard.tsx
+
+Exibir:
+
+palavra
+pontos
+tempo
+tentativas
+ReflectionCard.tsx
+
+Exibir:
+
+mensagem
+reflexão
+9. Tela de ranking
+RankingScreen.tsx
+Objetivo
+
+Mostrar competição e posição do jogador
+
+Estrutura sugerida
+<AppShell>
+  <AppHeader title="Ranking EAC" showBack />
+
+  <div className="flex flex-1 flex-col gap-5 px-6 py-6">
+    <PlayerRankHighlight position={3} points={480} />
+    <RankingList players={players} />
+
+    <div className="space-y-3">
+      <SecondaryButton label="Atualizar ranking" />
+      <SecondaryButton label="Compartilhar posição" />
+    </div>
+  </div>
+</AppShell>
+RankingList.tsx
+
+Lista:
+
+posição
+nome
+pontos
+PlayerRankHighlight.tsx
+
+Destaque do jogador atual
+
+10. Tela de compartilhamento
+ShareScreen.tsx
+Objetivo
+
+Centralizar ações de divulgação
+
+Estrutura sugerida
+<AppShell>
+  <AppHeader title="Compartilhar resultado" showBack />
+
+  <div className="flex flex-1 flex-col gap-5 px-6 py-6">
+    <Card>
+      <p>
+        Acabei de concluir uma fase do Game EAC e encontrei a palavra PERDÃO 🙌
+      </p>
+    </Card>
+
+    <ShareActions />
+  </div>
+</AppShell>
+ShareActions.tsx
+
+Botões:
+
+entrar no grupo WhatsApp
+compartilhar no WhatsApp
+copiar mensagem
+11. Tela final da jornada
+FinalJourneyScreen.tsx
+Objetivo
+
+Encerrar a sequência de fases com senso de conquista
+
+Estrutura sugerida
+<AppShell>
+  <div className="flex min-h-screen flex-col justify-between px-6 py-8">
+    <LogoBlock />
+
+    <div className="space-y-4 text-center">
+      <ScreenTitle
+        title="Jornada concluída"
+        subtitle="Você terminou todas as fases desta edição"
+      />
+      <Card>
+        <div className="space-y-2">
+          <p>Pontuação final: 980</p>
+          <p>Sua posição: #2</p>
+        </div>
+      </Card>
+    </div>
+
+    <div className="space-y-3">
+      <PrimaryButton label="Ver ranking" />
+      <SecondaryButton label="Compartilhar resultado" />
+      <SecondaryButton label="Jogar novamente" />
+    </div>
+  </div>
+</AppShell>
+12. Componentes compartilhados
+PrimaryButton.tsx
+Objetivo
+
+CTA principal
+
+Estrutura sugerida
+<button className="w-full rounded-2xl px-4 py-4 text-base font-semibold">
+  {label}
+</button>
+Regras
+botão grande
+largura total
+contraste alto
+foco evidente
+SecondaryButton.tsx
+Objetivo
+
+Ações secundárias
+
+Regras
+menor destaque
+ainda legível
+manter padrão visual do app
+Card.tsx
+Objetivo
+
+Container visual reutilizável
+
+Estrutura sugerida
+<div className="rounded-3xl border p-4 shadow-sm">
+  {children}
+</div>
+Regras
+cantos arredondados
+espaçamento generoso
+visual leve
+repetir padrão em todo app
+LogoBlock.tsx
+Objetivo
+
+Exibir a identidade visual do EAC
+
+Regras
+usar a logo oficial
+respeitar proporção
+não distorcer
+usar com respiro visual
+Referência
+https://imgur.com/c5XQ7TW
+ScreenTitle.tsx
+Objetivo
+
+Padronizar cabeçalhos de tela
+
+Props sugeridas
+title
+subtitle
+AppHeader.tsx
+Objetivo
+
+Cabeçalho padrão das telas internas
+
+Elementos
+botão voltar opcional
+título da tela
+logo pequena opcional
+BottomActions.tsx
+Objetivo
+
+Área fixa de ações no rodapé da tela de jogo
+
+Regras
+manter ações acessíveis ao polegar
+não esconder botões importantes
+13. Diretrizes de animação
+Usar com moderação
+entrada de telas com fade leve
+clique em célula com microanimação
+acerto com destaque visual suave
+erro com feedback rápido
+Evitar
+animações longas
+excesso de transições
+efeitos infantis exagerados
+14. Diretrizes de responsividade
+Prioridade
+smartphone primeiro
+Também suportar
+tablet
+desktop adaptado
+Regras
+desktop não deve parecer “mobile esticado”
+centralizar app em largura máxima controlada
+preservar proporção e espaçamento
+15. Diretrizes finais para o DEV
+O que este app deve parecer
+um jogo casual moderno
+jovem
+intuitivo
+com cara de app real
+O que este app não deve parecer
+formulário administrativo
+sistema corporativo
+tela genérica sem personalidade
+jogo infantil simplório
+Regra principal
+
+A experiência central precisa estar no labirinto.
+
+Tudo ao redor deve apoiar:
+
+descoberta da palavra
+recompensa visual
+vontade de continuar
+desejo de compartilhar

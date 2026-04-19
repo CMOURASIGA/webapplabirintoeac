@@ -1,0 +1,305 @@
+# Game EAC – Labirinto de Palavras  
+## Especificação Funcional + Técnica (Versão Completa)
+
+---
+
+## 1. Visão Geral
+
+Desenvolver um jogo mobile/web para o EAC baseado em labirintos de letras, onde o jogador percorre caminhos para descobrir palavras com significado reflexivo.
+
+O sistema deve unir:
+
+- jogo simples e rápido
+- descoberta de palavras
+- reflexão
+- compartilhamento social
+- gamificação com ranking
+- persistência de progresso
+
+---
+
+## 2. Objetivos do Produto
+
+### Objetivo principal
+Gerar engajamento entre adolescentes do EAC com um jogo interativo que combine desafio e reflexão.
+
+### Objetivos complementares
+- estimular participação contínua
+- incentivar competição saudável
+- promover interação em grupo
+- permitir administração de conteúdo sem depender de código
+- registrar dados para análise futura
+
+---
+
+## 3. Conceito do Jogo
+
+- O jogador percorre um labirinto
+- Cada célula contém uma letra
+- O caminho forma uma palavra
+- Apenas um caminho leva à palavra correta
+- Ao final, o jogador recebe uma mensagem + reflexão
+
+---
+
+## 4. Fluxo Principal do Jogo
+
+1. Jogador acessa o sistema  
+2. Se identifica (novo ou existente)  
+3. Inicia fase  
+4. Percorre labirinto  
+5. Forma palavra  
+6. Sistema valida  
+7. Exibe resultado + reflexão  
+8. Jogador escolhe ação:
+   - próxima fase  
+   - compartilhar  
+   - refletir depois  
+9. Sistema registra dados  
+10. Ranking é atualizado  
+
+---
+
+## 5. Mecânica do Jogo
+
+### Movimentação
+- cima, baixo, esquerda, direita  
+- não pode repetir célula  
+
+### Condições de vitória
+- chegar ao fim do labirinto  
+- formar palavra correta  
+
+### Condições de erro
+- caminho sem saída  
+- palavra inválida  
+
+---
+
+## 6. Botões e Ações
+
+### 6.1 Próxima fase
+- salvar resultado  
+- atualizar pontuação  
+- carregar próxima fase  
+- habilitar apenas após acerto  
+
+---
+
+### 6.2 Compartilhar
+
+Mensagem padrão:
+
+Acabei de concluir uma fase do Game EAC e encontrei a palavra "PERDÃO" 🙌  
+Vem participar também.  
+
+Entre no grupo:  
+[LINK_DO_GRUPO]  
+
+Jogue aqui:  
+[LINK_DO_JOGO]  
+
+Configurações:
+- whatsapp_group_link  
+- game_public_link  
+- share_message_template  
+
+---
+
+### 6.3 Refletir depois
+- registrar evento  
+- permitir continuidade  
+- não bloquear fluxo  
+
+---
+
+## 7. Gamificação
+
+### Pontuação
+
+pontuacaoFase = 100 + bonusTempo + bonusPrimeiraTentativa - penalidades
+
+Regras:
+- acerto: +100  
+- tempo: até +50  
+- primeira tentativa: +25  
+- erro: -10  
+
+---
+
+### Ranking
+- posição  
+- nome  
+- pontuação total  
+- fases concluídas  
+- tempo total  
+
+Ordenação:
+1. pontuação  
+2. fases  
+3. tempo  
+
+---
+
+## 8. Continuidade do Jogador
+
+### Primeiro acesso
+- nome  
+- apelido  
+- telefone  
+
+Sistema:
+- gera id_jogador  
+- salva no Sheets  
+- salva no localStorage  
+
+---
+
+### Retorno
+- mesmo dispositivo → automático  
+- outro dispositivo → buscar por telefone  
+
+---
+
+## 9. Estrutura Google Sheets
+
+### CONFIG
+- chave  
+- valor  
+
+---
+
+### PALAVRAS
+- id_fase  
+- palavra_correta  
+- mensagem  
+- reflexao  
+
+---
+
+### LABIRINTOS
+- id_fase  
+- grid_json  
+- inicio  
+- fim  
+
+---
+
+### JOGADORES
+- id_jogador  
+- nome  
+- telefone  
+- pontuacao_total  
+
+---
+
+### RESULTADOS
+- id_jogador  
+- id_fase  
+- acertou  
+- tentativas  
+- tempo  
+- pontuacao  
+
+---
+
+### RANKING
+- posição  
+- jogador  
+- pontuação  
+
+---
+
+### LOG_EVENTOS
+- evento  
+- jogador  
+- data  
+
+---
+
+## 10. Arquitetura
+
+### Frontend
+- React  
+- mobile first  
+
+### Backend
+- Apps Script ou Node  
+
+### Persistência
+- Google Sheets  
+
+---
+
+## 11. Fluxos
+
+### Carregar fase
+Frontend → API → Sheets  
+
+### Salvar resultado
+Frontend → API → Sheets  
+
+### Compartilhar
+Frontend → WhatsApp  
+
+---
+
+## 12. Requisitos
+
+- iniciar fase  
+- registrar caminho  
+- validar palavra  
+- exibir reflexão  
+- compartilhar  
+- ranking  
+
+---
+
+## 13. Regras
+
+- fase só termina com acerto  
+- ranking por pontuação  
+- palavras fora do código  
+- links configuráveis  
+
+---
+
+## 14. MVP
+
+- fases  
+- pontuação  
+- ranking  
+- compartilhamento  
+- persistência  
+
+---
+
+## 15. Fora do MVP
+
+- login Google  
+- analytics  
+- histórico  
+
+---
+
+## 16. Pontos Críticos
+
+- não expor Sheets direto  
+- não fixar dados no código  
+- garantir continuidade do jogador  
+- evitar duplicidade  
+- validar pontuação no backend  
+
+---
+
+## 17. Direcionamento Final
+
+O valor do jogo não está no labirinto.
+
+Está em:
+- palavra  
+- mensagem  
+- reflexão  
+- competição  
+
+Isso é o que gera impacto real no EAC.

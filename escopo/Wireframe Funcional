@@ -1,0 +1,475 @@
+# Game EAC – Wireframe Funcional em Markdown
+## Referência visual e estrutural para desenvolvimento
+
+---
+
+## 1. Premissas do Wireframe
+
+Este wireframe representa a estrutura base do Game EAC em formato mobile first, com foco em:
+
+- simplicidade de uso
+- leitura rápida
+- interação direta
+- gamificação visível
+- identidade do EAC presente
+- boa experiência para adolescentes
+
+---
+
+## 2. Diretrizes Gerais de Layout
+
+### Formato principal
+- mobile first
+- largura total da tela
+- altura total da viewport
+- sem rolagem vertical durante a fase do jogo
+- área principal centralizada
+- botões sempre visíveis
+- alto contraste visual
+
+### Estrutura padrão das telas
+- topo com identidade e status
+- área central com foco na ação principal
+- rodapé com ações objetivas
+- evitar menus escondidos durante o jogo
+
+---
+
+## 3. Tela 1 – Abertura / Boas-vindas
+
+### Objetivo
+Apresentar rapidamente o jogo e levar o usuário para entrar ou continuar.
+
+### Wireframe
+```text
+┌──────────────────────────────┐
+│            LOGO EAC          │
+│                              │
+│      GAME EAC                │
+│   Labirinto de Palavras      │
+│                              │
+│ Descubra palavras, avance    │
+│ nas fases e participe do     │
+│ ranking do encontro.         │
+│                              │
+│ [ Continuar meu jogo ]       │
+│                              │
+│ [ Novo jogador ]             │
+│                              │
+│ [ Ver ranking ]              │
+└──────────────────────────────┘
+
+Regras de UX/UI
+logo centralizada no topo
+título forte e curto
+subtítulo explicativo em 2 ou 3 linhas
+botões grandes, empilhados e fáceis de tocar
+botão principal com maior destaque visual
+tela limpa, sem excesso de informação
+
+4. Tela 2 – Identificação do Jogador
+Objetivo
+
+Cadastrar ou recuperar um jogador.
+
+Wireframe
+
+┌──────────────────────────────┐
+│ ← Voltar        LOGO EAC     │
+│                              │
+│     Identifique-se           │
+│                              │
+│ Nome                         │
+│ [________________________]   │
+│                              │
+│ Apelido                      │
+│ [________________________]   │
+│                              │
+│ Telefone                     │
+│ [________________________]   │
+│                              │
+│ [ Entrar no jogo ]           │
+│                              │
+│ Já joguei antes              │
+│ [ Continuar com telefone ]   │
+└──────────────────────────────┘
+
+Regras de UX/UI
+formulário simples
+poucos campos
+labels visíveis
+botão principal fixo na parte inferior visível
+opção de recuperação clara
+nada de formulário longo
+
+5. Tela 3 – Recuperar Progresso
+Objetivo
+
+Permitir ao jogador continuar a partir do telefone.
+
+Wireframe
+
+┌──────────────────────────────┐
+│ ← Voltar        LOGO EAC     │
+│                              │
+│   Continuar meu jogo         │
+│                              │
+│ Telefone cadastrado          │
+│ [________________________]   │
+│                              │
+│ [ Buscar meu progresso ]     │
+│                              │
+│ Se encontrado:               │
+│ Nome: Lucas                  │
+│ Apelido: Luks                │
+│ Fase atual: 3                │
+│ Pontuação: 240               │
+│                              │
+│ [ Continuar ]                │
+└──────────────────────────────┘
+
+Regras de UX/UI
+retorno simples
+caso encontre jogador, mostrar resumo antes de entrar
+evitar mensagens confusas
+caso não encontre, mostrar erro amigável
+
+6. Tela 4 – Home do Jogo
+Objetivo
+
+Mostrar visão resumida do jogador e acesso à fase atual.
+
+Wireframe
+
+┌──────────────────────────────┐
+│ LOGO EAC         Fase 3/10   │
+│                              │
+│ Olá, Lucas 👋                │
+│                              │
+│ Pontuação total: 240         │
+│ Ranking atual: #5            │
+│ Palavra do dia: ???          │
+│                              │
+│ [ Continuar fase atual ]     │
+│                              │
+│ [ Ver ranking ]              │
+│ [ Compartilhar jogo ]        │
+│                              │
+│ Progresso                    │
+│ [■■■□□□□□□□]                │
+└──────────────────────────────┘
+
+Regras de UX/UI
+tela enxuta
+foco no CTA principal
+progresso visível
+ranking aparente
+ideal para retorno rápido ao jogo
+
+7. Tela 5 – Jogo / Labirinto
+Objetivo
+
+Ser a tela principal de interação do jogo.
+
+Wireframe
+
+┌──────────────────────────────┐
+│ LOGO EAC        Fase 3       │
+│ Pontos: 240    Tempo: 00:18  │
+│                              │
+│ Palavra: P E _ _ _ _         │
+│                              │
+│        ┌───┬───┬───┬───┐     │
+│        │ P │ X │ M │ O │     │
+│        ├───┼───┼───┼───┤     │
+│        │ E │ R │ D │ A │     │
+│        ├───┼───┼───┼───┤     │
+│        │ B │ C │ A │ O │     │
+│        ├───┼───┼───┼───┤     │
+│        │ F │ G │ H │ O │     │
+│        └───┴───┴───┴───┘     │
+│                              │
+│ [ Reiniciar ] [ Voltar ]     │
+└──────────────────────────────┘
+
+Regras de UX/UI
+essa é a tela mais importante do produto
+o grid precisa estar no centro e dominar a atenção
+palavra sendo formada deve estar acima do grid
+tempo e pontuação no topo, mas sem roubar foco
+botões secundários pequenos, porém acessíveis
+não usar rolagem
+células grandes o suficiente para toque confortável
+feedback instantâneo ao tocar
+Regras visuais do grid
+estado padrão com contraste neutro
+célula selecionada com cor de destaque
+caminho já percorrido com tom diferente
+erro com feedback vermelho
+sucesso com verde
+animações leves, sem exagero
+8. Tela 6 – Resultado da Fase
+Objetivo
+
+Fechar a fase com recompensa visual, mensagem e reflexão.
+
+Wireframe
+
+┌──────────────────────────────┐
+│ LOGO EAC                     │
+│                              │
+│ ✅ Você encontrou: PERDÃO    │
+│                              │
+│ +125 pontos                  │
+│ Tempo: 00:24                 │
+│ Tentativas: 1                │
+│                              │
+│ Mensagem                     │
+│ Perdoar não muda o passado,  │
+│ mas muda o coração.          │
+│                              │
+│ Reflexão                     │
+│ Existe alguém que você       │
+│ precisa perdoar hoje?        │
+│                              │
+│ [ Próxima fase ]             │
+│ [ Compartilhar ]             │
+│ [ Refletir depois ]          │
+└──────────────────────────────┘
+
+Regras de UX/UI
+sensação de conquista
+palavra encontrada em destaque
+pontuação visível
+mensagem curta
+reflexão objetiva
+botões empilhados, claros e fáceis de tocar
+foco no próximo passo
+9. Tela 7 – Ranking
+Objetivo
+
+Mostrar competição e incentivar retorno ao jogo.
+
+Wireframe
+
+┌──────────────────────────────┐
+│ ← Voltar       LOGO EAC      │
+│                              │
+│         Ranking EAC          │
+│                              │
+│ 1. Ana         540 pts       │
+│ 2. Pedro       500 pts       │
+│ 3. Lucas       480 pts       │
+│ 4. Sofia       430 pts       │
+│ 5. Maria       410 pts       │
+│                              │
+│ Sua posição: #3              │
+│ Sua pontuação: 480 pts       │
+│                              │
+│ [ Atualizar ranking ]        │
+│ [ Compartilhar posição ]     │
+└──────────────────────────────┘
+
+Regras de UX/UI
+top ranking visível sem esforço
+posição do jogador destacada
+visual limpo
+se possível, destacar top 3 com tratamento visual diferente
+não transformar ranking em tabela pesada
+10. Tela 8 – Compartilhamento
+Objetivo
+
+Facilitar divulgação no grupo e entre amigos.
+
+Wireframe
+
+┌──────────────────────────────┐
+│ ← Voltar       LOGO EAC      │
+│                              │
+│     Compartilhar resultado   │
+│                              │
+│ Acabei de concluir uma fase  │
+│ do Game EAC e encontrei a    │
+│ palavra PERDÃO 🙌            │
+│                              │
+│ Vem participar também.       │
+│                              │
+│ [ Entrar no grupo WhatsApp ] │
+│ [ Compartilhar no WhatsApp ] │
+│ [ Copiar mensagem ]          │
+└──────────────────────────────┘
+
+Regras de UX/UI
+deixar a ação bem clara
+botões autoexplicativos
+priorizar WhatsApp
+cópia de texto como fallback
+não depender de menus externos para achar a ação
+11. Tela 9 – Final da Jornada
+Objetivo
+
+Encerrar uma sequência de fases com senso de conquista.
+
+Wireframe
+
+┌──────────────────────────────┐
+│           LOGO EAC           │
+│                              │
+│     🎉 Jornada concluída     │
+│                              │
+│ Você terminou todas as fases │
+│ disponíveis desta edição.    │
+│                              │
+│ Pontuação final: 980         │
+│ Sua posição: #2              │
+│                              │
+│ [ Ver ranking ]              │
+│ [ Compartilhar resultado ]   │
+│ [ Jogar novamente ]          │
+└──────────────────────────────┘
+
+Regras de UX/UI
+sensação clara de finalização
+reforço da conquista
+CTA de compartilhamento forte
+CTA de ranking forte
+12. Componentes de Interface
+12.1 AppHeader
+
+Responsável por:
+
+logo
+nome da tela
+status resumido
+12.2 PrimaryButton
+
+Botão principal de ação
+
+grande
+largo
+alto contraste
+fácil toque
+12.3 SecondaryButton
+
+Botão secundário
+
+menos destaque
+ainda visível
+12.4 MazeGrid
+
+Componente principal da fase
+
+grid responsivo
+centralizado
+células com estados visuais
+12.5 MazeCell
+
+Estado da célula:
+
+padrão
+selecionada
+visitada
+erro
+correta
+12.6 ScoreBadge
+
+Exibir pontuação resumida
+
+12.7 ProgressBar
+
+Exibir avanço no jogo
+
+12.8 ResultCard
+
+Bloco para:
+
+palavra
+mensagem
+reflexão
+pontos
+12.9 RankingList
+
+Lista de posições do ranking
+
+12.10 ShareActions
+
+Ações de compartilhamento
+
+13. Regras de UX para o DEV
+Obrigatório
+usuário deve entender o que fazer sem tutorial extenso
+primeira ação precisa ser óbvia
+o jogo deve carregar rápido
+toda ação deve ter resposta visual
+nenhum fluxo crítico pode depender de mais de 2 ou 3 passos
+Evitar
+telas poluídas
+excesso de textos
+botões escondidos
+menus complexos
+grids pequenos demais
+cores fracas com pouco contraste
+fontes decorativas
+excesso de animações
+14. Regras de UI para o DEV
+Visual
+estética moderna e limpa
+linguagem jovem, mas não infantil
+foco em contraste e legibilidade
+logo do EAC presente com respeito à identidade visual
+Hierarquia
+ação principal
+conteúdo da fase
+status do jogador
+elementos institucionais
+Espaçamento
+boa distância entre blocos
+área de toque confortável
+respiro visual em todas as telas
+15. Regras de Usabilidade para o DEV
+usar áreas de toque adequadas para mobile
+não exigir precisão excessiva
+manter ações principais no alcance do polegar
+não exigir leitura longa antes de jogar
+exibir erros com linguagem simples
+permitir retorno fácil entre telas
+16. Direcionamento Final de Design
+
+O visual do jogo deve transmitir:
+
+simplicidade
+energia
+competição saudável
+clareza
+identidade do EAC
+
+Não deve parecer:
+
+sistema corporativo
+formulário administrativo
+jogo infantil demais
+tela genérica sem personalidade
+
+O ideal é algo entre:
+
+jogo casual mobile
+app jovem de interação
+experiência leve com propósito
+17. Observação sobre a Logo
+
+Logo de referência:
+https://imgur.com/c5XQ7TW
+
+Uso recomendado:
+
+tela de abertura
+cabeçalho do jogo
+ranking
+final da jornada
+
+Cuidados:
+
+não distorcer
+não cortar
+não aplicar filtros pesados
+manter boa área de respiro ao redor

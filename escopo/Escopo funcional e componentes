@@ -1,0 +1,337 @@
+# Game EAC – Labirinto de Palavras  
+## Especificação Funcional, Técnica e de Experiência (UX/UI/US)
+
+---
+
+## 1. Visão Geral
+
+Desenvolver um jogo mobile/web para o EAC baseado em labirintos de letras, com foco em:
+
+- engajamento
+- simplicidade
+- reflexão
+- competição
+
+---
+
+## 2. Identidade Visual
+
+### Logo oficial
+https://imgur.com/c5XQ7TW
+
+### Regras de uso
+- não alterar proporção
+- não distorcer
+- manter fundo transparente quando possível
+- sempre visível na tela inicial e ranking
+
+---
+
+## 3. Diretrizes de UX (Experiência do Usuário)
+
+### Princípios obrigatórios
+
+- interação simples e direta
+- tempo de entendimento menor que 5 segundos
+- jogador deve começar a jogar sem tutorial longo
+- feedback visual imediato a cada ação
+- evitar qualquer fricção desnecessária
+
+---
+
+### Fluxo ideal
+
+1. entrar no jogo  
+2. identificar-se rapidamente  
+3. começar a jogar em até 2 cliques  
+4. terminar fase em até 30–60 segundos  
+5. receber feedback claro  
+6. continuar jogando  
+
+---
+
+## 4. Diretrizes de Usabilidade (US)
+
+- botões grandes e clicáveis
+- evitar textos longos
+- foco total em mobile
+- nenhuma rolagem durante o jogo
+- ações sempre visíveis (não esconder em menu)
+- erros devem ser claros e visuais
+
+---
+
+## 5. Diretrizes de UI (Interface)
+
+### Layout padrão da tela
+[ LOGO EAC ]
+
+[ Palavra sendo formada ]
+
+[ GRID DO LABIRINTO ]
+
+[ BOTÕES DE AÇÃO ]
+
+
+---
+
+### Hierarquia visual
+
+1. Labirinto (principal)
+2. Palavra em construção
+3. Botões
+4. Logo
+
+---
+
+### Cores (sugestão)
+
+- fundo escuro ou neutro
+- caminho correto → verde
+- erro → vermelho
+- caminho selecionado → destaque azul ou amarelo
+- texto → alto contraste
+
+---
+
+### Tipografia
+
+- simples e legível
+- sem fontes decorativas
+- tamanho grande para mobile
+
+---
+
+## 6. Componentes do Sistema
+
+---
+
+### 6.1 GameHeader
+
+#### Função
+Exibir:
+- logo
+- nome do jogo
+- progresso
+
+#### Elementos
+- logo EAC
+- fase atual
+- pontuação
+
+---
+
+### 6.2 MazeGrid
+
+#### Função
+Renderizar o labirinto
+
+#### Regras
+- grid responsivo
+- células clicáveis
+- feedback visual imediato
+
+---
+
+### 6.3 Cell
+
+#### Função
+Representar cada célula do labirinto
+
+#### Estados
+- padrão
+- selecionado
+- visitado
+- erro
+- correto
+
+---
+
+### 6.4 PalavraDisplay
+
+#### Função
+Mostrar a palavra sendo formada em tempo real
+
+---
+
+### 6.5 ResultModal
+
+#### Função
+Exibir resultado da fase
+
+#### Conteúdo
+- palavra encontrada
+- mensagem
+- reflexão
+- botões
+
+---
+
+### 6.6 RankingScreen
+
+#### Função
+Exibir ranking
+
+#### Conteúdo
+- top 10 jogadores
+- posição do jogador atual
+- pontuação
+
+---
+
+### 6.7 PlayerLogin
+
+#### Função
+Identificar jogador
+
+#### Campos
+- nome
+- apelido
+- telefone
+
+---
+
+## 7. Experiência do Labirinto
+
+### Regras
+
+- jogador toca na célula para mover
+- caminho fica destacado
+- letras vão formando palavra
+- movimento inválido bloqueado
+
+---
+
+### Feedback visual
+
+- movimento válido → animação leve
+- erro → vibrar ou piscar vermelho
+- sucesso → destaque verde + animação
+
+---
+
+## 8. Botões e Comportamentos
+
+---
+
+### Próxima fase
+- habilitado apenas após acerto
+- transição imediata
+
+---
+
+### Compartilhar
+- abrir WhatsApp
+- permitir copiar texto
+- incluir link do grupo
+
+---
+
+### Refletir depois
+- registrar evento
+- seguir fluxo
+
+---
+
+## 9. Gamificação
+
+### Elementos obrigatórios
+
+- pontuação por fase
+- ranking geral
+- ranking por período
+- feedback visual de pontuação
+
+---
+
+## 10. Continuidade do Jogador
+
+### Estratégia
+
+- salvar id no localStorage
+- recuperação por telefone
+- evitar duplicidade
+
+---
+
+## 11. Estrutura de Dados (Sheets)
+
+(ver estrutura definida anteriormente)
+
+---
+
+## 12. Arquitetura
+
+### Frontend
+- React
+- mobile first
+
+### Backend
+- Apps Script ou Node
+
+---
+
+## 13. Fluxos Técnicos
+
+### Carregar fase
+API → Sheets → Frontend
+
+### Salvar resultado
+Frontend → API → Sheets
+
+---
+
+## 14. Requisitos Funcionais
+
+- iniciar jogo
+- jogar fase
+- validar palavra
+- exibir resultado
+- compartilhar
+- ranking
+
+---
+
+## 15. Requisitos Não Funcionais
+
+- performance rápida
+- responsivo
+- fácil manutenção
+- segurança básica
+
+---
+
+## 16. MVP
+
+- fases jogáveis
+- ranking
+- pontuação
+- compartilhamento
+- persistência
+
+---
+
+## 17. Pontos Críticos
+
+- UX simples é obrigatório
+- não complicar interface
+- não poluir visual
+- não esconder ações
+- manter foco no jogo
+
+---
+
+## 18. Direcionamento Final
+
+O jogo precisa parecer:
+
+- simples
+- rápido
+- intuitivo
+- competitivo
+
+Se ficar complexo, perde o público.
+
+Se ficar simples demais, perde o interesse.
+
+Equilíbrio é essencial.
