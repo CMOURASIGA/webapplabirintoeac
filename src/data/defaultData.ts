@@ -112,7 +112,7 @@ const phaseThemes: PhaseTheme[] = [
 
 export const defaultConfig: GameConfig = {
   whatsappGroupLink: "https://chat.whatsapp.com/FZ4dFpFUco4FZgJLjWz7Ow",
-  gamePublicLink: "https://SEU_LINK_DO_JOGO_AQUI",
+  gamePublicLink: "https://webapplabirintoeac.vercel.app/",
   shareMessageTemplate:
     'Acabei de concluir uma fase do Game EAC e encontrei a palavra "{{word}}"!\n\nVem participar tambem.\n\nEntre no grupo:\n{{group_link}}\n\nJogue aqui:\n{{game_link}}',
   totalPhases: phaseThemes.length,

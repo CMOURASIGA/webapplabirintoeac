@@ -529,7 +529,7 @@ function getConfig_() {
   var rows = getRowsAsObjects_(SHEETS.CONFIG, HEADERS.CONFIG);
   var config = {
     whatsappGroupLink: "https://chat.whatsapp.com/FZ4dFpFUco4FZgJLjWz7Ow",
-    gamePublicLink: "https://SEU_LINK_DO_JOGO_AQUI",
+    gamePublicLink: "https://webapplabirintoeac.vercel.app/",
     shareMessageTemplate:
       'Acabei de concluir uma fase do Game EAC e encontrei a palavra "{{word}}"!\n\nVem participar tambem.\n\nEntre no grupo:\n{{group_link}}\n\nJogue aqui:\n{{game_link}}',
     totalPhases: 20,
@@ -956,7 +956,7 @@ function seedDemoData_() {
     "whatsapp_group_link",
     "https://chat.whatsapp.com/FZ4dFpFUco4FZgJLjWz7Ow"
   );
-  ensureConfigValueIfMissing_("game_public_link", "https://SEU_LINK_DO_JOGO_AQUI");
+  upsertConfigValue_("game_public_link", "https://webapplabirintoeac.vercel.app/");
   ensureConfigValueIfMissing_(
     "share_message_template",
     'Acabei de concluir uma fase do Game EAC e encontrei a palavra "{{word}}"!\n\nVem participar tambem.\n\nEntre no grupo:\n{{group_link}}\n\nJogue aqui:\n{{game_link}}'
