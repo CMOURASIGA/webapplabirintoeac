@@ -45,10 +45,24 @@ export default function ResultScreen(): JSX.Element {
         <ReflectionCard message={activeResult.result.message} reflection={activeResult.result.reflection} />
         <div className="space-y-3">
           <PrimaryButton
-            label={activeResult.journeyCompleted ? "Concluir jornada" : "Proxima fase"}
-            onClick={() =>
-              navigate(activeResult.journeyCompleted ? "/final" : `/game/${activeResult.nextPhase}`)
+            label={
+              activeResult.journeyCompleted
+                ? "Concluir jornada"
+                : activeResult.phaseCompleted
+                  ? "Proxima fase"
+                  : "Proxima palavra"
             }
+            onClick={() => {
+              if (activeResult.journeyCompleted) {
+                navigate("/final");
+                return;
+              }
+              navigate(`/game/${activeResult.nextPhase}?word=${activeResult.nextWordOrder || 1}`);
+            }}
+          />
+          <SecondaryButton
+            label="Jogar fase desde a palavra 1"
+            onClick={() => navigate(`/game/${activeResult.result.phaseId}?word=1`)}
           />
           <SecondaryButton label="Compartilhar" onClick={() => navigate("/share")} />
           <SecondaryButton label="Refletir depois" onClick={() => void handleReflectLater()} />

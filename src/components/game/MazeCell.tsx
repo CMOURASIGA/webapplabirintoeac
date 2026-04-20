@@ -25,13 +25,29 @@ export default function MazeCell({
     stateClass = "border-green-400/70 bg-green-500/25 text-green-50";
   }
 
+  if (isStart) {
+    stateClass = "border-emerald-300/70 bg-emerald-500/25 text-emerald-50";
+  }
+
+  if (isEnd) {
+    stateClass = "border-yellow-300/70 bg-yellow-500/20 text-yellow-50";
+  }
+
   return (
     <button
       onClick={onClick}
       className={`relative flex h-14 w-14 items-center justify-center rounded-2xl border text-xl font-extrabold transition ${stateClass}`}
     >
-      {isStart ? <span className="absolute left-1 top-1 text-[9px] font-bold text-green-200">S</span> : null}
-      {isEnd ? <span className="absolute right-1 top-1 text-[9px] font-bold text-yellow-200">F</span> : null}
+      {isStart ? (
+        <span className="absolute left-1 top-1 rounded bg-emerald-400/30 px-1 text-[8px] font-bold uppercase text-emerald-50">
+          Inicio
+        </span>
+      ) : null}
+      {isEnd ? (
+        <span className="absolute right-1 top-1 rounded bg-yellow-300/30 px-1 text-[8px] font-bold uppercase text-yellow-50">
+          Fim
+        </span>
+      ) : null}
       {letter}
     </button>
   );

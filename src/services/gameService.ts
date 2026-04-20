@@ -4,11 +4,18 @@ import { apiRequest } from "./apiClient";
 
 export async function getConfig(): Promise<GameConfig> {
   const response = await apiRequest("getConfig", {});
-  return response.config;
+  return {
+    ...response.config,
+    wordsPerPhase: Number((response.config as { wordsPerPhase?: number }).wordsPerPhase || 5) || 5
+  };
 }
 
-export async function getPhase(phaseId: number): Promise<{ phase: MazePhase; totalPhases: number }> {
-  return apiRequest("getPhase", { phaseId });
+export async function getPhase(
+  phaseId: number,
+  wordOrder?: number,
+  playerId?: string
+): Promise<{ phase: MazePhase; totalPhases: number; wordsPerPhase: number }> {
+  return apiRequest("getPhase", { phaseId, wordOrder, playerId });
 }
 
 export async function submitResult(payload: SubmitResultRequest): Promise<SubmitResultResponse> {

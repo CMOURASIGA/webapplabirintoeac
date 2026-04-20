@@ -7,6 +7,7 @@ import LogoBlock from "../components/common/LogoBlock";
 import AppShell from "../components/layout/AppShell";
 import { useAppContext } from "../store/AppContext";
 import { getApiModeLabel } from "../services/apiClient";
+import { GAME_HERO_IMAGE_URL } from "../constants/branding";
 
 export default function WelcomeScreen(): JSX.Element {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function WelcomeScreen(): JSX.Element {
   if (booting) {
     return (
       <AppShell>
-        <LoadingState label="Iniciando Game EAC..." />
+        <LoadingState label="Iniciando Game EAC..." emphasis />
       </AppShell>
     );
   }
@@ -27,6 +28,13 @@ export default function WelcomeScreen(): JSX.Element {
 
         <div className="space-y-3 text-center">
           <ScreenTitle title="Labirinto de Palavras" subtitle="Descubra palavras, avance nas fases e entre no ranking." />
+          <div className="overflow-hidden rounded-3xl border border-white/10 bg-slate-900/60 shadow-game">
+            <img
+              src={GAME_HERO_IMAGE_URL}
+              alt="Imagem representando o jogo Labirinto de Palavras"
+              className="h-44 w-full object-cover"
+            />
+          </div>
           <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Modo API: {getApiModeLabel()}</p>
         </div>
 
@@ -36,6 +44,7 @@ export default function WelcomeScreen(): JSX.Element {
             onClick={() => navigate(player ? "/home" : "/continue")}
           />
           <PrimaryButton label="Novo jogador" onClick={() => navigate("/register")} />
+          <SecondaryButton label="Como jogar" onClick={() => navigate("/help")} />
           <SecondaryButton label="Ver ranking" onClick={() => navigate("/ranking")} />
         </div>
       </div>

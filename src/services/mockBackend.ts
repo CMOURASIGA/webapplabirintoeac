@@ -1,6 +1,6 @@
 import { defaultConfig, defaultPhases } from "../data/defaultData";
 import type { ApiAction, ApiActionMap, ApiEnvelope, LogEventRequest } from "../types/api";
-import type { PhaseResult, SubmitResultRequest } from "../types/game";
+import type { MazePhase, PhaseResult, SubmitResultRequest } from "../types/game";
 import type { Player, PlayerInput, RankingEntry } from "../types/player";
 import { normalizePhone } from "../utils/phone";
 import { calculatePhaseScore } from "../utils/score";
@@ -112,6 +112,10 @@ function registerPlayer(input: PlayerInput): { player: Player } {
 
   const existing = db.players.find((player) => normalizePhone(player.phone) === phone);
   if (existing) {
+    if (!existing.currentWordInPhase) {
+      existing.currentWordInPhase = 1;
+      saveDb(db);
+    }
     return { player: existing };
   }
 
@@ -124,6 +128,7 @@ function registerPlayer(input: PlayerInput): { player: Player } {
     totalTimeSeconds: 0,
     totalCompletedPhases: 0,
     currentPhase: 1,
+    currentWordInPhase: 1,
     createdAt: nowIso()
   };
 
@@ -137,34 +142,97 @@ function findPlayerByPhone(phone: string): { player: Player | null } {
   const db = getDb();
   const normalized = normalizePhone(phone);
   const player = db.players.find((item) => normalizePhone(item.phone) === normalized) ?? null;
+  if (player && !player.currentWordInPhase) {
+    player.currentWordInPhase = 1;
+    saveDb(db);
+  }
   return { player };
 }
 
 function getPlayerById(playerId: string): { player: Player | null } {
   const db = getDb();
   const player = db.players.find((item) => item.id === playerId) ?? null;
+  if (player && !player.currentWordInPhase) {
+    player.currentWordInPhase = 1;
+    saveDb(db);
+  }
   return { player };
 }
 
-function getPhase(phaseId: number): { phase: (typeof defaultPhases)[number]; totalPhases: number } {
+function findPhaseByNumberAndWord(phases: MazePhase[], phaseId: number, wordOrder: number): MazePhase | undefined {
+  return phases.find((item) => item.id === phaseId && item.wordOrder === wordOrder);
+}
+
+function assertPhaseUnlocked(player: Player, phaseId: number, wordOrder: number): void {
+  const currentPhase = Math.max(1, Number(player.currentPhase || 1));
+  const currentWordInPhase = Math.max(1, Number(player.currentWordInPhase || 1));
+
+  if (phaseId > currentPhase) {
+    throw new Error(
+      `Fase bloqueada. Conclua a fase ${currentPhase} para liberar a fase ${phaseId}.`
+    );
+  }
+
+  if (phaseId === currentPhase && wordOrder > currentWordInPhase) {
+    throw new Error(
+      `Palavra bloqueada. Conclua a palavra ${currentWordInPhase} antes de avancar.`
+    );
+  }
+}
+
+function getPhase(
+  phaseId: number,
+  wordOrder?: number,
+  playerId?: string
+): { phase: (typeof defaultPhases)[number]; totalPhases: number; wordsPerPhase: number } {
   const db = getDb();
-  const phase = db.phases.find((item) => item.id === phaseId);
+  const safeWordOrder = Math.max(1, Math.min(wordOrder ?? 1, db.config.wordsPerPhase));
+  if (playerId) {
+    const player = db.players.find((item) => item.id === playerId);
+    if (!player) {
+      throw new Error("Jogador nao encontrado.");
+    }
+    assertPhaseUnlocked(player, phaseId, safeWordOrder);
+  }
+  const phase = findPhaseByNumberAndWord(db.phases, phaseId, safeWordOrder);
   if (!phase) {
-    throw new Error(`Fase ${phaseId} nao encontrada.`);
+    throw new Error(`Fase ${phaseId} / palavra ${safeWordOrder} nao encontrada.`);
   }
   return {
     phase,
-    totalPhases: db.config.totalPhases
+    totalPhases: db.config.totalPhases,
+    wordsPerPhase: db.config.wordsPerPhase
   };
 }
 
-function computeCompletedPhases(results: PhaseResult[], playerId: string): number {
-  const completed = new Set(
-    results
-      .filter((result) => result.playerId === playerId && result.correct)
-      .map((result) => result.phaseId)
+function computeCompletedPhases(results: PhaseResult[], playerId: string, wordsPerPhase: number, totalPhases: number): number {
+  const completedWordsByPhase = new Map<number, Set<number>>();
+  results.forEach((result) => {
+    if (result.playerId !== playerId || !result.correct) {
+      return;
+    }
+    const phaseWords = completedWordsByPhase.get(result.phaseId) ?? new Set<number>();
+    phaseWords.add(result.wordOrder || 1);
+    completedWordsByPhase.set(result.phaseId, phaseWords);
+  });
+
+  let count = 0;
+  for (let phaseId = 1; phaseId <= totalPhases; phaseId += 1) {
+    if ((completedWordsByPhase.get(phaseId)?.size ?? 0) >= wordsPerPhase) {
+      count += 1;
+    }
+  }
+  return count;
+}
+
+function hasPreviousCorrectResult(results: PhaseResult[], playerId: string, phaseId: number, wordOrder: number): boolean {
+  return results.some(
+    (result) =>
+      result.playerId === playerId &&
+      result.phaseId === phaseId &&
+      (result.wordOrder || 1) === wordOrder &&
+      result.correct
   );
-  return completed.size;
 }
 
 function submitResult(payload: SubmitResultRequest): ApiActionMap["submitResult"]["response"] {
@@ -174,9 +242,15 @@ function submitResult(payload: SubmitResultRequest): ApiActionMap["submitResult"
     throw new Error("Jogador nao encontrado.");
   }
 
-  const phase = db.phases.find((item) => item.id === payload.phaseId);
+  if (!player.currentWordInPhase) {
+    player.currentWordInPhase = 1;
+  }
+
+  const wordOrder = Math.max(1, Math.min(payload.wordOrder || player.currentWordInPhase, db.config.wordsPerPhase));
+  assertPhaseUnlocked(player, payload.phaseId, wordOrder);
+  const phase = findPhaseByNumberAndWord(db.phases, payload.phaseId, wordOrder);
   if (!phase) {
-    throw new Error("Fase nao encontrada.");
+    throw new Error("Fase/palavra nao encontrada.");
   }
 
   const normalizedWord = normalizeWord(payload.wordFormed);
@@ -190,6 +264,8 @@ function submitResult(payload: SubmitResultRequest): ApiActionMap["submitResult"
   const result: PhaseResult = {
     playerId: payload.playerId,
     phaseId: payload.phaseId,
+    wordOrder,
+    wordsPerPhase: db.config.wordsPerPhase,
     word: phase.word,
     wordFormed: normalizedWord,
     message: phase.message,
@@ -201,30 +277,36 @@ function submitResult(payload: SubmitResultRequest): ApiActionMap["submitResult"
     createdAt: nowIso()
   };
 
+  const alreadySolvedThisWord = hasPreviousCorrectResult(db.results, payload.playerId, payload.phaseId, wordOrder);
   db.results.push(result);
 
-  if (isCorrect) {
-    const hasPreviousCorrect = db.results.some(
-      (item) =>
-        item !== result &&
-        item.playerId === payload.playerId &&
-        item.phaseId === payload.phaseId &&
-        item.correct
-    );
+  let phaseCompleted = false;
 
-    if (!hasPreviousCorrect) {
-      player.totalScore += score;
-      player.totalTimeSeconds += payload.timeSeconds;
-      if (payload.phaseId >= player.currentPhase) {
-        player.currentPhase = payload.phaseId + 1;
+  if (isCorrect && !alreadySolvedThisWord) {
+    player.totalScore += score;
+    player.totalTimeSeconds += payload.timeSeconds;
+
+    if (payload.phaseId === player.currentPhase && wordOrder === player.currentWordInPhase) {
+      if (wordOrder >= db.config.wordsPerPhase) {
+        player.currentPhase += 1;
+        player.currentWordInPhase = 1;
+        phaseCompleted = true;
+      } else {
+        player.currentWordInPhase += 1;
       }
     }
   }
 
-  player.totalCompletedPhases = computeCompletedPhases(db.results, player.id);
+  player.totalCompletedPhases = computeCompletedPhases(
+    db.results,
+    player.id,
+    db.config.wordsPerPhase,
+    db.config.totalPhases
+  );
 
   const journeyCompleted = player.currentPhase > db.config.totalPhases;
   const nextPhase = journeyCompleted ? db.config.totalPhases : player.currentPhase;
+  const nextWordOrder = journeyCompleted ? db.config.wordsPerPhase : player.currentWordInPhase;
 
   saveDb(db);
 
@@ -232,6 +314,9 @@ function submitResult(payload: SubmitResultRequest): ApiActionMap["submitResult"
     result,
     player,
     nextPhase,
+    nextWordOrder,
+    wordsPerPhase: db.config.wordsPerPhase,
+    phaseCompleted,
     journeyCompleted
   };
 }
@@ -279,7 +364,11 @@ function handleAction<TAction extends ApiAction>(
     case "getPlayerById":
       return getPlayerById((payload as { playerId: string }).playerId) as ApiActionMap[TAction]["response"];
     case "getPhase":
-      return getPhase((payload as { phaseId: number }).phaseId) as ApiActionMap[TAction]["response"];
+      return getPhase(
+        (payload as { phaseId: number; wordOrder?: number; playerId?: string }).phaseId,
+        (payload as { phaseId: number; wordOrder?: number; playerId?: string }).wordOrder,
+        (payload as { phaseId: number; wordOrder?: number; playerId?: string }).playerId
+      ) as ApiActionMap[TAction]["response"];
     case "submitResult":
       return submitResult(payload as SubmitResultRequest) as ApiActionMap[TAction]["response"];
     case "getRanking":

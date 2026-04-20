@@ -17,6 +17,7 @@ interface AppContextValue {
   continuePlayer: (phone: string) => Promise<Player | null>;
   logoutPlayer: () => void;
   setPlayer: (player: Player | null) => void;
+  restartJourneyLocal: () => void;
 }
 
 const AppContext = createContext<AppContextValue | undefined>(undefined);
@@ -61,6 +62,20 @@ export function AppProvider({ children }: { children: React.ReactNode }): JSX.El
     setLastResult(null);
   }, []);
 
+  const restartJourneyLocal = useCallback(() => {
+    setLastResult(null);
+    setPlayer((current) => {
+      if (!current) {
+        return current;
+      }
+      return {
+        ...current,
+        currentPhase: 1,
+        currentWordInPhase: 1
+      };
+    });
+  }, []);
+
   useEffect(() => {
     void refreshBootstrap();
   }, [refreshBootstrap]);
@@ -77,7 +92,8 @@ export function AppProvider({ children }: { children: React.ReactNode }): JSX.El
       registerNewPlayer,
       continuePlayer: continuePlayerHandler,
       logoutPlayer,
-      setPlayer
+      setPlayer,
+      restartJourneyLocal
     }),
     [
       booting,
@@ -88,7 +104,8 @@ export function AppProvider({ children }: { children: React.ReactNode }): JSX.El
       refreshPlayer,
       registerNewPlayer,
       continuePlayerHandler,
-      logoutPlayer
+      logoutPlayer,
+      restartJourneyLocal
     ]
   );
 

@@ -13,6 +13,7 @@ export interface Player {
   totalTimeSeconds: number;
   totalCompletedPhases: number;
   currentPhase: number;
+  currentWordInPhase: number;
   createdAt: string;
 }
 

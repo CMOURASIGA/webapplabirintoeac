@@ -8,6 +8,7 @@ import ResultScreen from "./screens/ResultScreen";
 import RankingScreen from "./screens/RankingScreen";
 import ShareScreen from "./screens/ShareScreen";
 import FinalJourneyScreen from "./screens/FinalJourneyScreen";
+import HelpScreen from "./screens/HelpScreen";
 
 function App(): JSX.Element {
   return (
@@ -21,6 +22,7 @@ function App(): JSX.Element {
       <Route path="/ranking" element={<RankingScreen />} />
       <Route path="/share" element={<ShareScreen />} />
       <Route path="/final" element={<FinalJourneyScreen />} />
+      <Route path="/help" element={<HelpScreen />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

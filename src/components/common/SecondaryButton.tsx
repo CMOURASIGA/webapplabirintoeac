@@ -18,7 +18,7 @@ export default function SecondaryButton({
       type={type}
       disabled={disabled}
       onClick={onClick}
-      className={`w-full rounded-2xl border border-white/25 bg-white/5 px-4 py-4 text-base font-semibold text-slate-100 transition hover:bg-white/10 ${className}`}
+      className={`w-full rounded-2xl border border-sky-200/25 bg-slate-900/55 px-4 py-4 text-base font-semibold text-slate-100 transition hover:border-sky-300/40 hover:bg-slate-800/60 ${className}`}
     >
       {label}
     </button>

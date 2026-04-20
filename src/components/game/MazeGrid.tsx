@@ -17,12 +17,13 @@ export default function MazeGrid({
   end,
   onCellClick
 }: MazeGridProps): JSX.Element {
+  const safeGrid = Array.isArray(grid) ? grid.filter((row): row is string[] => Array.isArray(row)) : [];
   const visited = new Set(path.map((coord) => coordToKey(coord)));
   const selected = path[path.length - 1];
 
   return (
     <div className="mx-auto inline-grid gap-2 rounded-3xl border border-white/10 bg-slate-950/50 p-3">
-      {grid.map((row, rowIndex) => (
+      {safeGrid.map((row, rowIndex) => (
         <div key={`row-${rowIndex}`} className="flex gap-2">
           {row.map((letter, colIndex) => {
             const coord: Coord = { row: rowIndex, col: colIndex };

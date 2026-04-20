@@ -12,7 +12,7 @@ import { useAppContext } from "../store/AppContext";
 
 export default function FinalJourneyScreen(): JSX.Element {
   const navigate = useNavigate();
-  const { player } = useAppContext();
+  const { player, config, booting } = useAppContext();
   const [ranking, setRanking] = useState<RankingEntry[]>([]);
 
   useEffect(() => {
@@ -32,8 +32,24 @@ export default function FinalJourneyScreen(): JSX.Element {
     return found?.position ?? null;
   }, [player, ranking]);
 
+  if (booting) {
+    return (
+      <AppShell>
+        <div className="flex min-h-[calc(100vh-2rem)] items-center justify-center py-6 text-slate-200">
+          Carregando jornada...
+        </div>
+      </AppShell>
+    );
+  }
+
   if (!player) {
     return <Navigate to="/" replace />;
+  }
+
+  function handlePlayAgain(): void {
+    const totalPhases = config?.totalPhases ?? 20;
+    const replayPhase = Math.min(Math.max((player?.currentPhase ?? 1) - 1, 1), totalPhases);
+    navigate(`/game/${replayPhase}?word=1`);
   }
 
   return (
@@ -52,7 +68,7 @@ export default function FinalJourneyScreen(): JSX.Element {
         <div className="space-y-3">
           <PrimaryButton label="Ver ranking" onClick={() => navigate("/ranking")} />
           <SecondaryButton label="Compartilhar resultado" onClick={() => navigate("/share")} />
-          <SecondaryButton label="Jogar novamente" onClick={() => navigate("/game/1")} />
+          <SecondaryButton label="Jogar novamente" onClick={handlePlayAgain} />
         </div>
       </div>
     </AppShell>

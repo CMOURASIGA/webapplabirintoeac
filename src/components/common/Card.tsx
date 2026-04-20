@@ -7,7 +7,7 @@ export default function Card({
 }): JSX.Element {
   return (
     <div
-      className={`rounded-3xl border border-white/15 bg-slate-900/70 p-4 shadow-game backdrop-blur-sm ${className}`}
+      className={`rounded-3xl border border-sky-200/20 bg-gradient-to-b from-slate-900/80 to-slate-950/80 p-4 shadow-game backdrop-blur-sm ${className}`}
     >
       {children}
     </div>

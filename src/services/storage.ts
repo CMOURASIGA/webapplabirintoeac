@@ -1,5 +1,5 @@
 export const STORAGE_KEYS = {
-  db: "eac_labirinto_db_v1",
+  db: "eac_labirinto_db_v2",
   currentPlayerId: "eac_labirinto_current_player_id"
 } as const;
 

@@ -7,6 +7,8 @@ export interface Coord {
 
 export interface MazePhase {
   id: number;
+  wordOrder: number;
+  wordsPerPhase: number;
   word: string;
   message: string;
   reflection: string;
@@ -18,6 +20,7 @@ export interface MazePhase {
 export interface SubmitResultRequest {
   playerId: string;
   phaseId: number;
+  wordOrder: number;
   wordFormed: string;
   attempts: number;
   timeSeconds: number;
@@ -27,6 +30,8 @@ export interface SubmitResultRequest {
 export interface PhaseResult {
   playerId: string;
   phaseId: number;
+  wordOrder: number;
+  wordsPerPhase: number;
   word: string;
   wordFormed: string;
   message: string;
@@ -42,5 +47,8 @@ export interface SubmitResultResponse {
   result: PhaseResult;
   player: Player;
   nextPhase: number;
+  nextWordOrder: number;
+  wordsPerPhase: number;
+  phaseCompleted: boolean;
   journeyCompleted: boolean;
 }

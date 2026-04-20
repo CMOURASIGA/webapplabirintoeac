@@ -6,6 +6,7 @@ export interface GameConfig {
   gamePublicLink: string;
   shareMessageTemplate: string;
   totalPhases: number;
+  wordsPerPhase: number;
 }
 
 export interface LogEventRequest {
@@ -49,8 +50,8 @@ export interface ApiActionMap {
     response: { player: Player | null };
   };
   getPhase: {
-    request: { phaseId: number };
-    response: { phase: MazePhase; totalPhases: number };
+    request: { phaseId: number; wordOrder?: number; playerId?: string };
+    response: { phase: MazePhase; totalPhases: number; wordsPerPhase: number };
   };
   submitResult: {
     request: SubmitResultRequest;
