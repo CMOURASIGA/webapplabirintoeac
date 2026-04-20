@@ -559,6 +559,20 @@ function getConfig_() {
     }
   }
 
+  // Corrige placeholders antigos salvos em planilha.
+  if (
+    !String(config.whatsappGroupLink || "").trim() ||
+    String(config.whatsappGroupLink).indexOf("SEU_GRUPO_AQUI") !== -1
+  ) {
+    config.whatsappGroupLink = "https://chat.whatsapp.com/FZ4dFpFUco4FZgJLjWz7Ow";
+  }
+  if (
+    !String(config.gamePublicLink || "").trim() ||
+    String(config.gamePublicLink).indexOf("SEU_LINK_DO_JOGO_AQUI") !== -1
+  ) {
+    config.gamePublicLink = "https://webapplabirintoeac.vercel.app/";
+  }
+
   return config;
 }
 

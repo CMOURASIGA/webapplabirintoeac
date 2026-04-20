@@ -6,7 +6,6 @@ import LoadingState from "../components/common/LoadingState";
 import LogoBlock from "../components/common/LogoBlock";
 import AppShell from "../components/layout/AppShell";
 import { useAppContext } from "../store/AppContext";
-import { getApiModeLabel } from "../services/apiClient";
 import { GAME_HERO_IMAGE_URL } from "../constants/branding";
 
 export default function WelcomeScreen(): JSX.Element {
@@ -35,7 +34,6 @@ export default function WelcomeScreen(): JSX.Element {
               className="h-44 w-full object-cover"
             />
           </div>
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Modo API: {getApiModeLabel()}</p>
         </div>
 
         <div className="space-y-3">
